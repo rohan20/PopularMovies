@@ -122,6 +122,10 @@ public class MainActivityFragment extends Fragment
             adapter.notifyDataSetChanged();
             return true;
         }
+        else if (id == R.id.favourites)
+        {
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -142,6 +146,7 @@ public class MainActivityFragment extends Fragment
             try
             {
                 URL url = new URL(Constants.POPULAR_MOVIES_LIST_BASE_URL + Constants.API_KEY);
+
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder()
                         .url(url)
@@ -153,6 +158,7 @@ public class MainActivityFragment extends Fragment
                 if(response.isSuccessful())
                 {
                     ArrayList<Movie> movieList = new ArrayList<>();
+
                     JSONObject jsonObject = new JSONObject(JsonFromURL);
                     JSONArray jsonArray = jsonObject.getJSONArray("results");
 
@@ -189,8 +195,8 @@ public class MainActivityFragment extends Fragment
 
             return null;
 
-        }
 
+    }
         //check if net is on
         public boolean isOnline(Context context)
         {
@@ -228,7 +234,6 @@ public class MainActivityFragment extends Fragment
             //send movie list to grid adapter
             movies = listOfMovies;
             adapter = new PosterAdapter(context, movies);
-            gridView.setAdapter(adapter);
             gridView.setAdapter(adapter);
 
             progressDialog.dismiss();

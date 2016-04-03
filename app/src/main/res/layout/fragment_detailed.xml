@@ -1,107 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical"
+    android:fillViewport="true"
+    android:id="@+id/parentScrollView"
     tools:context=".DetailedActivityFragment">
-
-    <TextView
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Original Title"
-        android:id="@+id/originalTitleTextView"
-        android:gravity="center"
-        android:textSize="28sp"
-        android:typeface="serif" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        >
+        android:padding="10dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            >
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/originalTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="Original Title"
+                android:textSize="18sp"
+                android:typeface="serif" />
 
             <ImageView
+                android:id="@+id/addToFavourites"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:scaleType="center"
+                android:src="@android:drawable/btn_star_big_off" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+            <ImageView
                 android:id="@+id/moviePosterImageView"
-                android:src="@android:drawable/alert_dark_frame"
-                />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/sym_call_missed" />
 
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:padding="20dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="7.35 / 10"
-                android:drawableLeft="@drawable/ic_stars_amber_a700_36dp"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:id="@+id/userRating"
-                android:typeface="serif" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_event_black_36dp"
-                android:text="26-05-2015"
-                android:gravity="end|center_vertical"
-                android:id="@+id/releaseDate"
-                android:textSize="18sp"
-                android:typeface="serif" />
+                <TextView
+                    android:id="@+id/userRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_stars_amber_a700_36dp"
+                    android:gravity="center"
+                    android:paddingLeft="9dp"
+                    android:paddingTop="50dp"
+                    android:text="7.35 / 10"
+                    android:textSize="18sp"
+                    android:typeface="serif" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/releaseDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_event_black_36dp"
+                    android:gravity="end|center_vertical"
+                    android:paddingBottom="50dp"
+                    android:text="26-05-2015"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:typeface="serif" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <ScrollView
+        <TextView
+            android:id="@+id/synopsisTextView"
             android:layout_width="match_parent"
-            android:layout_weight="1.5"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="In the 1820s, a frontiersman, Hugh Glass, sets out on a path of vengeance against those who left him for dead after a bear mauling."
+            android:typeface="serif" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:text="In the 1820s, a frontiersman, Hugh Glass, sets out on a path of vengeance against those who left him for dead after a bear mauling."
-            android:id="@+id/synopsisTextView"
-            android:typeface="monospace" />
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0.25"
+            android:gravity="center_vertical"
+            android:text="Reviews"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
 
-        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/review1Author"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:background="#d9edea"
+                    android:gravity="center"
+                    android:text="Review 1 Author"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/childScrollView1"
+                    android:layout_weight="5">
+
+                    <TextView
+                        android:id="@+id/review1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="5"
+                        android:background="#d9edea"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Review 1 Content"
+                        android:textSize="10sp"
+                        android:typeface="serif" />
+
+                </ScrollView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/review2Author"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:background="#d9edea"
+                    android:gravity="center"
+                    android:text="Review 2 Author"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/childScrollView2"
+                    android:layout_weight="5">
+
+                    <TextView
+                        android:id="@+id/review2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:background="#d9edea"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Review 2 Content"
+                        android:textSize="10sp"
+                        android:typeface="serif" />
+
+                </ScrollView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.25"
+            android:gravity="center_vertical"
+            android:text="Trailers"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/trailerOne"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="5dp"
+                android:src="@android:drawable/sym_call_missed" />
+
+            <ImageView
+                android:id="@+id/trailerTwo"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="5dp"
+                android:src="@android:drawable/sym_call_missed" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
