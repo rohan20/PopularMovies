@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class PosterAdapter extends BaseAdapter
 {
-
     ArrayList<Movie> movies;
     Context context;
 

@@ -2,9 +2,14 @@ package com.example.rohan.popularmovies;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -32,14 +38,21 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DetailedActivityFragment extends Fragment {
+public class DetailedActivityFragment extends Fragment
+{
+
+    FavouritesOpenHelper helper;
+    SQLiteDatabase dbWritable;
+    SQLiteDatabase dbReadable;
+    ContentValues cv;
+    Cursor c;
 
     TextView title;
     ImageView poster;
     TextView userRating;
     TextView releaseDate;
     TextView synopsis;
-    ImageView favouritesButton;
+    Button favouritesButton;
 
     TextView reviewOne;
     TextView reviewOneAuthor;
@@ -58,16 +71,27 @@ public class DetailedActivityFragment extends Fragment {
     ScrollView child1;
     ScrollView child2;
 
+    String id[];
+    String selectString;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View outputView = inflater.inflate(R.layout.fragment_detailed, container, false);
+
+        helper = new FavouritesOpenHelper(getActivity(), null, 1);
+        dbWritable = helper.getWritableDatabase();
+        dbReadable = helper.getReadableDatabase();
+
+        cv = new ContentValues();
 
         title = (TextView) outputView.findViewById(R.id.originalTitleTextView);
         poster = (ImageView) outputView.findViewById(R.id.moviePosterImageView);
         userRating = (TextView) outputView.findViewById(R.id.userRating);
         releaseDate = (TextView) outputView.findViewById(R.id.releaseDate);
         synopsis = (TextView) outputView.findViewById(R.id.synopsisTextView);
-        favouritesButton = (ImageView) outputView.findViewById(R.id.addToFavourites);
+
+        favouritesButton = (Button) outputView.findViewById(R.id.addToFavourites);
 
         reviewOne = (TextView) outputView.findViewById(R.id.review1);
         reviewOneAuthor = (TextView) outputView.findViewById(R.id.review1Author);
@@ -81,6 +105,7 @@ public class DetailedActivityFragment extends Fragment {
         child1 = (ScrollView) outputView.findViewById(R.id.childScrollView1);
         child2 = (ScrollView) outputView.findViewById(R.id.childScrollView2);
 
+        //To make movie reviews scrollable
         parent.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
@@ -115,19 +140,65 @@ public class DetailedActivityFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
+
         movie = (Movie) getArguments().getSerializable(Constants.MOVIE_POSTER_CLICKED);
+
+        id = new String[]{movie.getId() + ""};
+        selectString = "SELECT * FROM " + FavouritesOpenHelper.FAVOURITES_TABLE + " WHERE " + FavouritesOpenHelper.FAVOURITES_ID + " =? ";
+
         setMovieData(movie);
+
+        //add/remove as favourite
+        favouritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
+                c = dbReadable.rawQuery(selectString, id);
+
+                if(c.moveToFirst()) //Movie exists in favourites
+                {
+                    //remove movie from favourites
+                    dbWritable.delete(FavouritesOpenHelper.FAVOURITES_TABLE, FavouritesOpenHelper.FAVOURITES_ID + " = " + movie.getId() + "", null);
+                    Toast.makeText(getActivity(), movie.getTitle() + " removed from favourites.", Toast.LENGTH_SHORT).show();
+                    favouritesButton.setText("Add");
+                }
+                else
+                {
+                    cv.put("IdOfFavourite", movie.getId());
+                    dbWritable.insert(FavouritesOpenHelper.FAVOURITES_TABLE, null, cv);
+                    Toast.makeText(getActivity(), movie.getTitle() + " added to favourites.", Toast.LENGTH_SHORT).show();
+                    favouritesButton.setText("Remove");
+                }
+
+            }
+        });
+
     }
 
-    public void setMovieData(final Movie movie) {
+    public void setMovieData(final Movie movie)
+    {
 
-        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("FavouriteMovies", Context.MODE_PRIVATE);
+        //first check if movie is a favourite
+        c = dbReadable.rawQuery(selectString, id);
 
+        if(c.moveToFirst()) //Movie exists in favourites
+        {
+            favouritesButton.setText("Remove");
+        }
+        else
+        {
+            favouritesButton.setText("Add");
+        }
+
+        //fetch reviews
         GetReviewsAsyncTask reviewsAsyncTask = new GetReviewsAsyncTask();
         reviewsAsyncTask.execute();
 
+        //fetch trailers
         GetTrailersAsyncTask moviesAsyncTask = new GetTrailersAsyncTask();
         moviesAsyncTask.execute();
 
@@ -137,31 +208,10 @@ public class DetailedActivityFragment extends Fragment {
         userRating.setText(movie.getVoteAverage() + " / 10");
         releaseDate.setText(movie.getReleaseDate());
         synopsis.setText(movie.getOverview());
-
-        favouritesButton.setOnClickListener(new View.OnClickListener() {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            @Override
-            public void onClick(View v) {
-
-                if (sharedPreferences.getString("movieName", "").equals(movie.getTitle())) {
-                    favouritesButton.setImageResource(android.R.drawable.btn_star_big_off);
-                    //Use Snackbar (dependencies design library)
-                    Toast.makeText(getActivity(), movie.getTitle() + " removed from favourites!", Toast.LENGTH_SHORT).show();
-                    editor.clear();
-                    editor.apply();
-                } else {
-                    favouritesButton.setImageResource(android.R.drawable.btn_star_big_on);
-                    editor.putString("movieName", movie.getTitle());
-                    editor.apply();
-                    //Use Snackbar (dependencies design library)
-                    Toast.makeText(getActivity(), movie.getTitle() + " added to favourites!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
-    class GetReviewsAsyncTask extends AsyncTask<String, Void, ArrayList<String>> {
+    class GetReviewsAsyncTask extends AsyncTask<String, Void, ArrayList<String>>
+    {
 
         ArrayList<String> reviews = new ArrayList<>();
 

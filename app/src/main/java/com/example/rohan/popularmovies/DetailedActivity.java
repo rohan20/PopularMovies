@@ -17,11 +17,8 @@ public class DetailedActivity extends AppCompatActivity
         Bundle bundle = intent.getExtras();
 
         DetailedActivityFragment detailedActivityFragment = new DetailedActivityFragment();
-        detailedActivityFragment.setHasOptionsMenu(true);
-
-        Movie movieClicked = (Movie) bundle.getSerializable(Constants.MOVIE_POSTER_CLICKED);
         detailedActivityFragment.setArguments(bundle);
 
-        getFragmentManager().beginTransaction().add(R.id.container, detailedActivityFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.portraitContainer, detailedActivityFragment).commit();
     }
 }
