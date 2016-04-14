@@ -164,14 +164,14 @@ public class DetailedActivityFragment extends Fragment
                     //remove movie from favourites
                     dbWritable.delete(FavouritesOpenHelper.FAVOURITES_TABLE, FavouritesOpenHelper.FAVOURITES_ID + " = " + movie.getId() + "", null);
                     Toast.makeText(getActivity(), movie.getTitle() + " removed from favourites.", Toast.LENGTH_SHORT).show();
-                    favouritesButton.setText("Add");
+                    favouritesButton.setText("ADD TO FAVOURITES");
                 }
                 else
                 {
                     cv.put("IdOfFavourite", movie.getId());
                     dbWritable.insert(FavouritesOpenHelper.FAVOURITES_TABLE, null, cv);
                     Toast.makeText(getActivity(), movie.getTitle() + " added to favourites.", Toast.LENGTH_SHORT).show();
-                    favouritesButton.setText("Remove");
+                    favouritesButton.setText("REMOVE FROM FAVOURITES");
                 }
 
             }
@@ -187,11 +187,11 @@ public class DetailedActivityFragment extends Fragment
 
         if(c.moveToFirst()) //Movie exists in favourites
         {
-            favouritesButton.setText("Remove");
+            favouritesButton.setText("REMOVE FROM FAVOURITES");
         }
         else
         {
-            favouritesButton.setText("Add");
+            favouritesButton.setText("ADD TO FAVOURITES");
         }
 
         //fetch reviews

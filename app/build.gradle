@@ -11,6 +11,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'YOUR_API_KEY', UniqueAPIKey
+    }
+
     buildTypes {
         release {
             minifyEnabled false

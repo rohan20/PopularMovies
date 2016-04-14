@@ -6,7 +6,7 @@ package com.example.rohan.popularmovies;
 public class Constants
 {
     //TODO remove API KEY!
-    public static final String API_KEY = "YOUR_API_KEY";
+    public static final String API_KEY = BuildConfig.YOUR_API_KEY;
     public static final String API_BASE_URL = "http://api.themoviedb.org/3/movie/";
 
     public static final String POPULAR_MOVIES_LIST_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=";
